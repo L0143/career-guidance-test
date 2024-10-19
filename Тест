@@ -1,0 +1,241 @@
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+
+class ProfTest:
+    def __init__(self, master):
+        self.master = master 
+        master.title("Профориентационный тест")
+        master.geometry("500x350")
+
+        self.user_data = {}
+
+        # Фрейм для ввода данных пользователя
+        self.data_frame = tk.Frame(master, bg="#f0f0f0")
+        self.data_frame.pack(pady=20)
+
+        tk.Label(self.data_frame, text="Введите ваши данные»", font=("Arial", 16), bg="#f0f0f0").pack()
+
+        tk.Label(self.data_frame, text="Имя:", bg="#f0f0f0").pack()
+        self.name_entry = tk.Entry(self.data_frame)
+        self.name_entry.pack()
+
+        tk.Label(self.data_frame, text="Возраст:", bg="#f0f0f0").pack()
+        self.age_entry = tk.Entry(self.data_frame)
+        self.age_entry.pack()
+
+        self.start_button = tk.Button(self.data_frame, text="Начать тест", command=self.start_test, bg="#e0e0e0")
+        self.start_button.pack(pady=10)
+
+        # Список вопросов и ответов
+        self.questions = [
+            "Что вам больше нравится: работать с людьми или с техникой?",
+            "Вы предпочитаете творческие задачи или логические?",
+            "Вам больше нравится работать в команде или самостоятельно?",
+            "Вас больше привлекают новые технологии или традиционные профессии?",
+            "Вы предпочитаете работу с постоянным графиком или с гибким?",
+            "Вам больше нравится решать проблемы или создавать что-то новое?",
+            "Вы предпочитаете работу, где требуется физическая активность или умственная?",
+            "Вам больше нравится работать с информацией или с материальными объектами?",
+            "Вы предпочитаете работу с короткими сроками или долгосрочные проекты?",
+            "Вам больше нравится работать с абстрактными идеями или с конкретными деталями?",
+            "Вы предпочитаете работу, где требуется общение с людьми, или работу, где нужно действовать самостоятельно?",
+            "Вы предпочитаете работу, где есть возможность развиваться и учиться новому, или стабильность и предсказуемость?",
+            "Вы предпочитаете работу, где есть элемент риска и неопределенности, или работу, где все четко и структурировано?",
+            "Вам больше нравится анализировать информацию или применять знания на практике?"
+        ]
+        self.answers = [
+            ["Люди", "Техника"],
+            ["Творческие задачи", "Логические задачи"],
+            ["Команда", "Самостоятельно"],
+            ["Новые технологии", "Традиционные профессии"],
+            ["Постоянный график", "Гибкий график"],
+            ["Решать проблемы", "Создавать что-то новое"],
+            ["Физическая активность", "Умственная работа"],
+            ["Информация", "Материальные объекты"],
+            ["Короткие сроки", "Долгосрочные проекты"],
+            ["Абстрактные идеи", "Конкретные детали"],
+            ["Общение с людьми", "Действовать самостоятельно"],
+            ["Развитие и обучение", "Стабильность и предсказуемость"],
+            ["Риск и неопределенность", "Четкость и структура"],
+            ["Анализировать информацию", "Применять знания на практике"]
+        ]
+
+        self.current_question = 0 
+        self.user_answers = []
+
+    def start_test(self):
+        self.user_data['name'] = self.name_entry.get()
+        self.user_data['age'] = self.age_entry.get()
+        # Скрыть фрейм ввода данных и показать вопросы
+        self.data_frame.pack_forget()
+        self.show_question()
+
+    def show_question(self):
+        # Фрейм для вопроса
+        self.question_frame = tk.Frame(self.master, bg="#f0f0f0")
+        self.question_frame.pack(pady=20)
+
+        self.question_label = tk.Label(self.question_frame, text=self.questions[self.current_question],
+                                       font=("Arial»", 14), wraplength=450, bg="#f0f0f0")
+        self.question_label.pack()
+
+        # Фрейм для ответов
+        self.answer_frame = tk.Frame(self.master, bg="#e0e0e0")
+        self.answer_frame.pack()
+
+        self.answer_buttons = []
+        for i, answer in enumerate(self.answers[self.current_question]):
+            button = tk.Button(self.answer_frame, text=answer, width=20, command=lambda i=i: self.select_answer(i),
+                              font=("Arial", 12), bg="#e0e0e0")
+            button.pack(pady=5)
+            self.answer_buttons.append(button)
+
+    def select_answer(self, answer_index):
+        self.user_answers.append(answer_index)
+        self.next_question()
+
+    def next_question(self):
+        self.current_question += 1
+
+        if self.current_question < len(self.questions):
+            # Обновление вопроса и ответов
+            self.question_label.config(text=self.questions[self.current_question])
+            for i, button in enumerate(self.answer_buttons):
+                button.config(text=self.answers[self.current_question][i])
+        else:
+            # Отображение результатов
+            self.show_results()
+
+    def show_results(self):
+        # Логика вывода рекомендаций по профессии
+        People_score = 0
+        Technology_score = 0
+        Creative_score = 0
+        Logic_score = 0
+        Teamwork_score = 0
+        Independent_score = 0
+        New_tech_score = 0
+        Traditional_score = 0
+        Flexible_schedule_score = 0 
+        Fixed_schedule_score = 0 
+        Problem_solving_score = 0
+        Creation_score = 0
+        Physical_score = 0
+        Mental_score = 0
+        Information_score = 0
+        Objects_score = 0
+        Short_term_score = 0 
+        long_term_score = 0 
+        Abstract_score = 0
+        Concrete_score = 0
+        Communication_score = 0
+        Independent_action_score = 0 
+        Development_score = 0
+        Stability_score = 0
+        Risk_score = 0
+        Structure_score = 0 
+        Analysis_score = 0
+        Application_score = 0
+
+        for i, answer in enumerate(self.user_answers):
+            if i == 0 and answer == 0:
+                People_score += 1
+            elif i == 0 and answer == 1:
+                Technology_score += 1
+            elif i == 1 and answer == 0:
+                Creative_score += 1
+            elif i == 1 and answer == 1:
+                Logic_score += 1
+            elif i == 2 and answer == 0:
+                Teamwork_score += 1
+            elif i == 2 and answer == 1:
+                Independent_score += 1
+            elif i == 3 and answer == 0:
+                New_tech_score += 1
+            elif i == 3 and answer == 1:
+                Traditional_score += 1
+            elif i == 4 and answer == 0:
+                Fixed_schedule_score += 1 
+            elif i == 4 and answer == 1:
+                Flexible_schedule_score += 1 
+            elif i == 5 and answer == 0:
+                Problem_solving_score += 1
+            elif i == 5 and answer == 1:
+                Creation_score += 1
+            elif i == 6 and answer == 0:
+                Physical_score += 1
+            elif i == 6 and answer == 1:
+                Mental_score += 1
+            elif i == 7 and answer == 0:
+                Information_score += 1
+            elif i == 7 and answer == 1:
+                Objects_score += 1
+            elif i == 8 and answer == 0:
+                Short_term_score += 1 
+            elif i == 8 and answer == 1:
+                lLong_term_score += 1 
+            elif i == 9 and answer == 0:
+                Abstract_score += 1
+            elif i == 9 and answer == 1:
+                Concrete_score += 1
+            elif i == 10 and answer == 0:
+                Communication_score += 1
+            elif i == 10 and answer == 1:
+                Independent_action_score += 1 
+            elif i == 11 and answer == 0:
+                Development_score += 1
+            elif i == 11 and answer == 1:
+                Stability_score += 1
+            elif i == 12 and answer == 0:
+                Risk_score += 1
+            elif i == 12 and answer == 1:
+                Structure_score += 1
+            elif i == 13 and answer == 0:
+                Analysis_score += 1
+            elif i == 13 and answer == 1:
+                Application_score += 1
+
+        # Пример простой логики для вывода рекомендации 
+        if People_score > Technology_score:
+            if Creative_score > Logic_score:
+                if Communication_score > Independent_action_score:
+                    recommended_profession = "Учитель, психолог, соц. работник, менеджер по персоналу"
+                else:
+                    recommended_profession = "Художник, дизайнер, музыкант, писатель"
+            else:
+                if Development_score > Stability_score:
+                    recommended_profession = "Менеджер по продажам, маркетолог, PR-специалист"
+                else:
+                    recommended_profession = "Администратор, секретарь, офис-менеджер"
+        else:
+            if New_tech_score > Traditional_score:
+                if Problem_solving_score > Creation_score:
+                    if Risk_score > Structure_score:
+                        recommended_profession = "Программист, системный администратор, инженер-программист, разработчик игр"
+                    else:
+                        recommended_profession = "Аналитик данных, инженер-проектировщик, IT-архитектор"
+                else:
+                    if Abstract_score > Concrete_score:
+                        recommended_profession = "Дизайнер интерфейсов, UX/UI-дизайнер, веб-дизайнер"
+                    else:
+                        recommended_profession = "Инженер-конструктор, механик, техник"
+            else:
+                if Physical_score > Mental_score:
+                    if Short_term_score > long_term_score:
+                        recommended_profession = "Строитель, сварщик, механик, водитель"
+                    else:
+                        recommended_profession = "Сантехник, электрик, слесарь, мастер по ремонту"
+                else:
+                    if Analysis_score > Application_score:
+                        recommended_profession = "Бухгалтер, экономист, юрист, аудитор"
+                    else:
+                        recommended_profession = "Финансовый аналитик, банковский работник, специалист по логистике"
+
+        messagebox.showinfo("Результаты теста", f"Имя: {self.user_data['name']}\nВозраст: {self.user_data['age']}\nРекомендованная профессия: {recommended_profession}")
+        self.master.destroy()
+
+root = tk.Tk()
+app = ProfTest(root)
+root.mainloop()
+
