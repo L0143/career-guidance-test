@@ -14,7 +14,7 @@ class ProfTest:
         self.data_frame = tk.Frame(master, bg="#f0f0f0")
         self.data_frame.pack(pady=20)
 
-        tk.Label(self.data_frame, text="Введите ваши данные»", font=("Arial", 16), bg="#f0f0f0").pack()
+        tk.Label(self.data_frame, text="Введите ваши данные", font=("Arial", 16), bg="#f0f0f0").pack()
 
         tk.Label(self.data_frame, text="Имя:", bg="#f0f0f0").pack()
         self.name_entry = tk.Entry(self.data_frame)
@@ -77,7 +77,7 @@ class ProfTest:
         self.question_frame.pack(pady=20)
 
         self.question_label = tk.Label(self.question_frame, text=self.questions[self.current_question],
-                                       font=("Arial»", 14), wraplength=450, bg="#f0f0f0")
+                                       font=("Arial", 14), wraplength=450, bg="#f0f0f0")
         self.question_label.pack()
 
         # Фрейм для ответов
@@ -126,7 +126,7 @@ class ProfTest:
         Information_score = 0
         Objects_score = 0
         Short_term_score = 0 
-        long_term_score = 0 
+        Long_term_score = 0
         Abstract_score = 0
         Concrete_score = 0
         Communication_score = 0
@@ -174,7 +174,7 @@ class ProfTest:
             elif i == 8 and answer == 0:
                 Short_term_score += 1 
             elif i == 8 and answer == 1:
-                lLong_term_score += 1 
+                Long_term_score += 1
             elif i == 9 and answer == 0:
                 Abstract_score += 1
             elif i == 9 and answer == 1:
@@ -238,4 +238,3 @@ class ProfTest:
 root = tk.Tk()
 app = ProfTest(root)
 root.mainloop()
-
